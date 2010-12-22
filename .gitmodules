@@ -1,0 +1,3 @@
+[submodule "libcharsetdetect"]
+	path = libcharsetdetect
+	url = https://batterseapower@github.com/batterseapower/libcharsetdetect.git

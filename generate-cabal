@@ -1,0 +1,41 @@
+#!/usr/bin/env runhaskell
+
+import Control.Monad
+
+import Data.List
+import Data.Maybe
+
+import System.Directory
+import System.FilePath
+
+main :: IO ()
+main = do
+    let directories = ["libcharsetdetect",
+                       "libcharsetdetect" </> "mozilla" </> "extensions" </> "universalchardet" </> "src" </> "base",
+                       "libcharsetdetect" </> "nspr-emu",
+                       "libcharsetdetect" </> "nspr-emu" </> "obsolete"]
+    fps <- fmap concat $ forM directories $ \directory -> do
+        files <- getDirectoryContents directory
+        fmap catMaybes $ forM files $ \file -> do
+            let fp = directory </> file
+            ok <- doesFileExist fp
+            if ok then return (Just fp)
+                  else return Nothing
+    
+    let buildable = filter (\fp -> takeExtension fp `elem` [".cpp", ".c"]) fps
+        extras    = filter (\fp -> takeExtension fp `elem` [".h"]) fps
+        include_dirs = nub $ map takeDirectory extras
+        
+        showBlock header n xs = [padRight (if is_first then header else "") n ' ' ++ x | (is_first, x) <- (True : repeat False) `zip` xs]
+        padRight xs n x | len < n   = xs ++ replicate (n - len) x
+                        | otherwise = xs
+          where len = length xs
+        
+        extra_source_files = unlines $ showBlock "Extra-Source-Files:" (length "Extra-Source-Files:  ") extras
+        c_sources = unlines $ map ("        " ++) $ showBlock "C-Sources:" (length "C-Sources:              ") buildable
+        c_opts = unlines $ map ("        " ++) $ showBlock "Cc-Options:" (length "Cc-Options:             ") ["-I" ++ include_dir | include_dir <- include_dirs]
+    
+    putStr c_opts
+    putStr extra_source_files
+    putStr c_sources
+    
