@@ -23,7 +23,7 @@ main = do
                   else return Nothing
     
     let buildable = filter (\fp -> takeExtension fp `elem` [".cpp", ".c"]) fps
-        extras    = filter (\fp -> takeExtension fp `elem` [".h"]) fps
+        extras    = filter (\fp -> takeExtension fp `elem` [".h", ".tab"]) fps
         include_dirs = nub $ map takeDirectory extras
         
         showBlock header n xs = [padRight (if is_first then header else "") n ' ' ++ x | (is_first, x) <- (True : repeat False) `zip` xs]
@@ -33,9 +33,9 @@ main = do
         
         extra_source_files = unlines $ showBlock "Extra-Source-Files:" (length "Extra-Source-Files:  ") extras
         c_sources = unlines $ map ("        " ++) $ showBlock "C-Sources:" (length "C-Sources:              ") buildable
-        c_opts = unlines $ map ("        " ++) $ showBlock "Cc-Options:" (length "Cc-Options:             ") ["-I" ++ include_dir | include_dir <- include_dirs]
+        include_dirs_block = unlines $ map ("        " ++) $ showBlock "Include-Dirs:" (length "Include-Dirs:           ") include_dirs
     
-    putStr c_opts
+    putStr include_dirs_block
     putStr extra_source_files
     putStr c_sources
     

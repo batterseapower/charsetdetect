@@ -1,18 +1,31 @@
 Name:                charsetdetect
-Version:             0.1
+Version:             1.0
 Cabal-Version:       >= 1.2
 Category:            Text
 Synopsis:            Character set detection for Haskell using Mozilla's Universal Character Set Detector
+Description:         Mozilla have developed a robust and efficient character set detection algorithm for
+                     use in their web browsers.  The algorithm is able to detect all of the most frequently
+                     encountered character encodings totally automatically.
+                     .
+                     This library wraps up their library and exposes a very simple Haskell interface to it.
 License:             LGPL
 Author:              Max Bolingbroke <batterseapower@hotmail.com>
 Maintainer:          Max Bolingbroke <batterseapower@hotmail.com>
 Homepage:            http://www.github.com/batterseapower/charsetdetect
 Build-Type:          Simple
 
+Extra-Source-Files:  libcharsetdetect/README.md
+                     libcharsetdetect/nspr-emu/README.md
+
 Extra-Source-Files:  libcharsetdetect/charsetdetect.h
                      libcharsetdetect/charsetdetectPriv.h
                      libcharsetdetect/nscore.h
+                     libcharsetdetect/mozilla/extensions/universalchardet/src/base/Big5Freq.tab
                      libcharsetdetect/mozilla/extensions/universalchardet/src/base/CharDistribution.h
+                     libcharsetdetect/mozilla/extensions/universalchardet/src/base/EUCKRFreq.tab
+                     libcharsetdetect/mozilla/extensions/universalchardet/src/base/EUCTWFreq.tab
+                     libcharsetdetect/mozilla/extensions/universalchardet/src/base/GB2312Freq.tab
+                     libcharsetdetect/mozilla/extensions/universalchardet/src/base/JISFreq.tab
                      libcharsetdetect/mozilla/extensions/universalchardet/src/base/JpCntx.h
                      libcharsetdetect/mozilla/extensions/universalchardet/src/base/nsBig5Prober.h
                      libcharsetdetect/mozilla/extensions/universalchardet/src/base/nsCharSetProber.h
@@ -42,16 +55,22 @@ Extra-Source-Files:  libcharsetdetect/charsetdetect.h
                      libcharsetdetect/nspr-emu/obsolete/protypes.h
 
 
-
 Library
         Exposed-Modules:        Codec.Text.Detect
         
-        Cc-Options:             -Ilibcharsetdetect
-                                -Ilibcharsetdetect/mozilla/extensions/universalchardet/src/base
-                                -Ilibcharsetdetect/nspr-emu
-                                -Ilibcharsetdetect/nspr-emu/obsolete
-        Ghc-Options:            -pgml g++
+        Build-Depends:          base >= 4.3.1 && < 5, bytestring >= 0.9.1.8 && < 0.10
         
+        -- We really need to ensure that the *final program* links with g++
+        -- It is useless to specify that the library links with it..
+        --Ghc-Options:            -pgml g++
+        
+        -- This is a bit dodgy since g++ might link in more stuff, but will probably work in practice:
+        Extra-Libraries:        stdc++
+        
+        Include-Dirs:           libcharsetdetect
+                                libcharsetdetect/mozilla/extensions/universalchardet/src/base
+                                libcharsetdetect/nspr-emu
+                                libcharsetdetect/nspr-emu/obsolete
         C-Sources:              libcharsetdetect/charsetdetect.cpp
                                 libcharsetdetect/mozilla/extensions/universalchardet/src/base/CharDistribution.cpp
                                 libcharsetdetect/mozilla/extensions/universalchardet/src/base/JpCntx.cpp
