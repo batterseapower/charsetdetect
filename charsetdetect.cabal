@@ -8,6 +8,7 @@ Description:         Mozilla have developed a robust and efficient character set
                      encountered character encodings totally automatically.
                      .
                      This library wraps up their library and exposes a very simple Haskell interface to it.
+                     The library is portable, and is confirmed to work on both Unix and Windows.
 License:             LGPL
 License-File:        LICENSE
 Author:              Max Bolingbroke <batterseapower@hotmail.com>
