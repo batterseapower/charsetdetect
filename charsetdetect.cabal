@@ -62,7 +62,7 @@ Source-Repository head
 Library
         Exposed-Modules:        Codec.Text.Detect
         
-        Build-Depends:          base >= 4.3.1 && < 5, bytestring >= 0.9.1.8 && < 0.10
+        Build-Depends:          base >= 4.2.0.2 && < 5, bytestring >= 0.9.1.7 && < 0.10
         
         -- We really need to ensure that the *final program* links with g++
         -- It is useless to specify that the library links with it..

@@ -17,6 +17,12 @@ import System.IO
 import System.IO.Unsafe
 
 
+#if !MIN_VERSION_base(4,3,0)
+mask :: ((IO a -> IO a) -> IO b) -> IO b
+mask io = blocked >>= \b -> if b then io id else block $ io unblock
+#endif
+
+
 -- typedef void* csd_t;
 type Csd_t = Ptr ()
 
