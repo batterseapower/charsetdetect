@@ -1,4 +1,4 @@
-{-# LANGUAGE ForeignFunctionInterface #-}
+{-# LANGUAGE ForeignFunctionInterface, CPP #-}
 -- | Detect the likely character encoding for a stream of bytes using Mozilla's Universal Character Set Detector.
 module Codec.Text.Detect (detectEncodingName, detectEncoding) where
 
