@@ -1,6 +1,6 @@
 Name:                charsetdetect
 Version:             1.0
-Cabal-Version:       >= 1.2
+Cabal-Version:       >= 1.6
 Category:            Text
 Synopsis:            Character set detection using Mozilla's Universal Character Set Detector
 Description:         Mozilla have developed a robust and efficient character set detection algorithm for
@@ -55,6 +55,9 @@ Extra-Source-Files:  libcharsetdetect/charsetdetect.h
                      libcharsetdetect/nspr-emu/prtypes.h
                      libcharsetdetect/nspr-emu/obsolete/protypes.h
 
+Source-Repository head
+  type:     git
+  location: git://github.com/batterseapower/charsetdetect.git
 
 Library
         Exposed-Modules:        Codec.Text.Detect
