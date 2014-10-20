@@ -7,6 +7,7 @@ import Control.Exception
 import qualified Data.ByteString.Internal as SI
 import qualified Data.ByteString.Lazy as L
 import Data.Traversable (traverse)
+import Control.Applicative
 
 import Foreign.C.Types
 import Foreign.C.String
@@ -42,7 +43,6 @@ foreign import ccall unsafe "csd_close" c_csd_close :: Csd_t -> IO CString
 -- > Big5
 -- > EUC-JP
 -- > EUC-KR
--- > GB18030
 -- > gb18030
 -- > HZ-GB-2312
 -- > IBM855
@@ -71,9 +71,6 @@ foreign import ccall unsafe "csd_close" c_csd_close :: Csd_t -> IO CString
 -- > X-ISO-10646-UCS-4-2143
 -- > X-ISO-10646-UCS-4-3412
 -- > x-mac-cyrillic
---
--- Note that there are two capitalisations of @gb18030@. For this reason (and to be future-proof against any future behaviour
--- like this for newly-added character sets) we recommend that you compare character set names case insensitively.
 {-# NOINLINE detectEncodingName #-}
 detectEncodingName :: L.ByteString -> Maybe String
 detectEncodingName b = unsafePerformIO $ do
@@ -90,7 +87,10 @@ detectEncodingName b = unsafePerformIO $ do
         c_encoding_ptr <- c_csd_close csd
         if c_encoding_ptr == nullPtr
          then return Nothing
-         else fmap Just (peekCString c_encoding_ptr)
+         else Just . normalise <$> peekCString c_encoding_ptr
+  where
+    normalise "GB18030" = "gb18030"
+    normalise x         = x
 
 -- | Detect the encoding for a 'L.ByteString' and attempt to create a 'TextEncoding' suitable for decoding it.
 detectEncoding :: L.ByteString -> IO (Maybe TextEncoding)
