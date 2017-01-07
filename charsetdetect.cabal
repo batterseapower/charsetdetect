@@ -62,9 +62,9 @@ Source-Repository head
 
 Library
         Exposed-Modules:        Codec.Text.Detect
-        
+
         Build-Depends:          base >= 4.2.0.2 && < 5, bytestring >= 0.9.1.7
-        
+
         -- Needed to ensure correct build on GHC 7.6 when imported by a
         -- library which uses Template Haskell.
         --
@@ -75,8 +75,14 @@ Library
             c-sources: cbits/dso_handle.c
 
         -- This is a bit dodgy since g++ might link in more stuff, but will probably work in practice:
-        Extra-Libraries:        stdc++
-        
+        if os(windows)
+          if arch(x86_64)
+            extra-libraries:    stdc++-6 gcc_s_seh-1
+          else
+            extra-libraries:    stdc++-6 gcc_s_dw2-1
+        else
+          extra-libraries:      stdc++
+
         Include-Dirs:           libcharsetdetect
                                 libcharsetdetect/mozilla/extensions/universalchardet/src/base
                                 libcharsetdetect/nspr-emu
