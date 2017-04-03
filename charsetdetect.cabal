@@ -1,5 +1,5 @@
 Name:                charsetdetect
-Version:             1.0
+Version:             1.1.0.2
 Cabal-Version:       >= 1.6
 Category:            Text
 Synopsis:            Character set detection using Mozilla's Universal Character Set Detector
