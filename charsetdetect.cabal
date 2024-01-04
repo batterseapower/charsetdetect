@@ -1,6 +1,6 @@
+Cabal-Version:       >= 1.8
 Name:                charsetdetect
 Version:             1.1.0.2
-Cabal-Version:       >= 1.6
 Category:            Text
 Synopsis:            Character set detection using Mozilla's Universal Character Set Detector
 Description:         Mozilla have developed a robust and efficient character set detection algorithm for
