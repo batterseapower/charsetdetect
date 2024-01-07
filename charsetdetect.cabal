@@ -65,6 +65,8 @@ Library
 
         Build-Depends:          base >= 4.2.0.2 && < 5, bytestring >= 0.9.1.7
 
+        default-language: Haskell98
+
         -- Needed to ensure correct build on GHC 7.6 when imported by a
         -- library which uses Template Haskell.
         --
